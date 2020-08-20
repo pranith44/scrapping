@@ -31,7 +31,10 @@ try:
             sim_apps=sim_soup_page.findAll("div",{"class":"WsMG1c nnK0zc"})
             for i in range(len(sim_apps)):
                 names.append(sim_apps[i]["title"])
-                print(sim_apps[i]["title"])
+                if len(names)>=300000:
+                    break
+                else:
+                    print(sim_apps[i]["title"])
 except HTTPError as err:
     if err.code==404:
         pass
