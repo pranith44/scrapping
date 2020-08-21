@@ -10,35 +10,41 @@ categories=page_2.findAll("a",{"class":"r2Osbf"})
 hrefs_cat=[]
 names=[]
 hrefs_sim=[]
-try:
-
-    for i in range(len(categories)):
-        hrefs_cat.append(categories[i]["href"])
-    for href in hrefs_cat:
+for i in range(len(categories)):
+    hrefs_cat.append(categories[i]["href"])
+for href in hrefs_cat:
+    try:
         opurl=urlopen("https://play.google.com"+href)
-        page=opurl.read()
-        opurl.close()
-        soup_page=soup(page,"html.parser")
-        apps=soup_page.findAll("div",{"class":"WsMG1c nnK0zc"})
-        similars=soup_page.findAll("a",{"class":"LkLjZd ScJHi U8Ww7d xjAeve nMZKrb id-track-click"})
-        for i in range(len(similars)):
-            hrefs_sim.append(similars[i]["href"])
-        for hrf in hrefs_sim:
+    except HTTPError as err:
+        if err.code==404:
+            pass
+        else:
+            raise
+    page=opurl.read()
+    opurl.close()
+    soup_page=soup(page,"html.parser")
+    apps=soup_page.findAll("div",{"class":"WsMG1c nnK0zc"})
+    similars=soup_page.findAll("a",{"class":"LkLjZd ScJHi U8Ww7d xjAeve nMZKrb id-track-click"})
+    for i in range(len(similars)):
+        hrefs_sim.append(similars[i]["href"])
+    for hrf in hrefs_sim:
+        try:
             opurl_1=urlopen("https://play.google.com"+hrf)
-            page_3=opurl_1.read()
-            opurl_1.close()
-            sim_soup_page=soup(page_3,"html.parser")
-            sim_apps=sim_soup_page.findAll("div",{"class":"WsMG1c nnK0zc"})
-            for i in range(len(sim_apps)):
-                names.append(sim_apps[i]["title"])
-                if len(names)>=300000:
-                    break
-                else:
-                    print(sim_apps[i]["title"])
-except HTTPError as err:
-    if err.code==404:
-        pass
-    else:
-        raise
+        except HTTPError as err:
+            if err.code==404:
+                pass
+            else:
+                raise
+        page_3=opurl_1.read()
+        opurl_1.close()
+        sim_soup_page=soup(page_3,"html.parser")
+        sim_apps=sim_soup_page.findAll("div",{"class":"WsMG1c nnK0zc"})
+        for i in range(len(sim_apps)):
+            names.append(sim_apps[i]["title"])
+            if len(names)>=300000:
+                break
+            else:
+                print("app_name; "+sim_apps[i]["title"])
 names_set=set(names)
+print(len(names))
 print(len(names_set))
