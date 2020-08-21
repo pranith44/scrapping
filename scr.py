@@ -17,7 +17,7 @@ for href in hrefs_cat:
         opurl=urlopen("https://play.google.com"+href)
     except HTTPError as err:
         if err.code==404:
-            pass
+            Continue
         else:
             raise
     page=opurl.read()
@@ -32,7 +32,7 @@ for href in hrefs_cat:
             opurl_1=urlopen("https://play.google.com"+hrf)
         except HTTPError as err:
             if err.code==404:
-                pass
+                Continue
             else:
                 raise
         page_3=opurl_1.read()
